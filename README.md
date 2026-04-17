@@ -17,3 +17,5 @@ Proyecto desarrollado en Java que permite gestionar un videoclub.
 
 ## 👤 Autor
 - Eros Verdejo
+- Ariel Ponce
+- Isaias Rojas
