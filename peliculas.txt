@@ -1,0 +1,5 @@
+P005;La Monja;Terror;100;2;0
+P004;Rapidos y Furiosos;Accion;130;0;1
+P001;John Wick;Accion;120;2;1
+P003;Son Como Ninos;Comedia;95;4;0
+P002;El Conjuro;Terror;110;1;1

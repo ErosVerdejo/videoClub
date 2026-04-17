@@ -1,0 +1,6 @@
+eros;9999999-9;comedia
+null;null;null
+Martin;22222222-2;Terror
+Isaias;11111111-1;Accion
+Valentina;33333333-3;Comedia
+isaias;21754903-5;the chosen
