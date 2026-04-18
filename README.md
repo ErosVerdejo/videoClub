@@ -44,6 +44,8 @@ VideoClub/
 - clase Pelicula tenemos clases internas en el PeliculaEstreno y clasica a futuro arreglaremos esto.
 - dato a considerar limitacion en peliculas.
 - agregar UML al Informe.
+- agregar a los demas contribuidores en el github (Isaias Rojas) (Ariel Ponce)
+- Ordenar las clases a carpeta para que quede mas estructurado y legible
 
 ## 👤 Autor
 - Eros Verdejo
