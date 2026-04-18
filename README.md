@@ -2,6 +2,10 @@
 
 Proyecto desarrollado en Java que permite gestionar un videoclub.
 
+## Descripcion
+
+VideoClub es un Sistema de Información desarrollado en Java que permite gestionar clientes, películas y arriendos de un videoclub. El sistema incluye persistencia de datos, manejo de excepciones y ejecución tanto en modo consola como en ventanas, aplicando principios de Programación Orientada a Objetos.
+
 ## 📌 Funcionalidades
 - Gestión de clientes
 - Gestión de películas
@@ -17,6 +21,7 @@ Proyecto desarrollado en Java que permite gestionar un videoclub.
 
 ## 🏗️ Estructura del Proyecto
 
+```
 VideoClub/
 ├── src/
 │   ├── consola/         # Menús e interacción por consola
@@ -36,6 +41,7 @@ VideoClub/
 │
 │
 └── README.md            # Documentación principal   
+```
 
 ## 💀 Errores a Solucionar
 - cuando se ejecuta el codigo al usar la accion de abrir ventana esta se abre en segundo plano dato a tener en consideración.
