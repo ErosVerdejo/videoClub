@@ -46,6 +46,7 @@ VideoClub/
 ## 💀 Errores a Solucionar
 - cuando se se quiere generar un cliente si en la ventana se apreta cancelar hasta su ultimo atributo este se va a generar con sus atributos NULL.
 
+## 👤 Autores
 - Eros Verdejo
 - Ariel Ponce
 - Isaias Rojas
