@@ -8,13 +8,16 @@
  *
  * @author eros-
  */
-public class Pelicula {
+public abstract class Pelicula {
     private String idPelicula;
     private String nombrePe;
     private String genero;
     private int duracion;
     private int stock;
     private int vecesArrendada;
+
+    // Precio base de arriendo en pesos para todas las peliculas
+    protected static final int PRECIO_BASE = 2000;
 
     /*
      * Constructor de la clase Pelicula.
@@ -113,102 +116,18 @@ public class Pelicula {
     }
 
     /*
-     * Obtiene el tipo de película (general, estreno, clásica).
+     * Obtiene el tipo de película (estreno, clásica).
+     * Cada subclase define su propio tipo.
      * retorna el tipo de película
      */
-    public String getTipoPelicula() {
-        return "Pelicula general";
-    }
-    
-    public class PeliculaEstreno extends Pelicula {
-    private int anioEstreno;
+    public abstract String getTipoPelicula();
 
     /*
-     * Constructor de PeliculaEstreno.
-     * idPelicula el ID único
-     * nombrePe el nombre
-     * genero el género
-     * duracion la duración
-     * stock el stock
-     * anioEstreno el año de estreno
+     * Calcula el precio de arriendo de la película.
+     * Cada subclase implementa su propia lógica de precio.
+     * retorna el precio en pesos
      */
-    public PeliculaEstreno(String idPelicula, String nombrePe, String genero, int duracion, int stock, int anioEstreno) {
-        super(idPelicula, nombrePe, genero, duracion, stock);
-        this.anioEstreno = anioEstreno;
-    }
-
-    public int getAnioEstreno() {
-        return anioEstreno;
-    }
-
-    public void setAnioEstreno(int anioEstreno) {
-        this.anioEstreno = anioEstreno;
-    }
-
-    @Override
-    public String getTipoPelicula() {
-        return "Estreno";
-    }
-
-    @Override
-    public String toString() {
-        return "PeliculaEstreno{" +
-                "id='" + getIdPelicula() + '\'' +
-                ", nombre='" + getNombrePe() + '\'' +
-                ", genero='" + getGenero() + '\'' +
-                ", duracion=" + getDuracion() +
-                ", stock=" + getStock() +
-                ", vecesArrendada=" + getVecesArrendada() +
-                ", anioEstreno=" + anioEstreno +
-                ", tipo='" + getTipoPelicula() + '\'' +
-                '}';
-        }
-    }
-
-    public class PeliculaClasica extends Pelicula {
-    private String decada;
-
-    /*
-     * Constructor de PeliculaClasica.
-     * idPelicula el ID único
-     * nombrePe el nombre
-     * genero el género
-     * duracion la duración
-     * stock el stock
-     * decada la década de la película
-     */
-    public PeliculaClasica(String idPelicula, String nombrePe, String genero, int duracion, int stock, String decada) {
-        super(idPelicula, nombrePe, genero, duracion, stock);
-        this.decada = decada;
-    }
-
-    public String getDecada() {
-        return decada;
-    }
-
-    public void setDecada(String decada) {
-        this.decada = decada;
-    }
-
-    @Override
-    public String getTipoPelicula() {
-        return "Clasica";
-    }
-
-    @Override
-    public String toString() {
-        return "PeliculaClasica{" +
-                "id='" + getIdPelicula() + '\'' +
-                ", nombre='" + getNombrePe() + '\'' +
-                ", genero='" + getGenero() + '\'' +
-                ", duracion=" + getDuracion() +
-                ", stock=" + getStock() +
-                ", vecesArrendada=" + getVecesArrendada() +
-                ", decada='" + decada + '\'' +
-                ", tipo='" + getTipoPelicula() + '\'' +
-                '}';
-        }
-    }
+    public abstract int calcularPrecioArriendo();
 
     @Override
     public String toString() {
@@ -220,6 +139,7 @@ public class Pelicula {
                 ", stock=" + stock +
                 ", vecesArrendada=" + vecesArrendada +
                 ", tipo='" + getTipoPelicula() + '\'' +
+                ", precioArriendo=$" + calcularPrecioArriendo() +
                 '}';
     }
 }

@@ -12,33 +12,29 @@ public class Persona {
     private String nombre;
     private String rut;
 
-    
     /*
      * Constructor de la clase Persona.
      * nombre el nombre de la persona
      * rut el RUT de la persona
      */
-    public Persona(String nombre, String rut)
-    {
+    public Persona(String nombre, String rut) {
         this.nombre = nombre;
         this.rut = rut;
-
     }
-    public String getnombre(){
+
+    public String getNombre() {
         return nombre;
     }
-    public String getrut(){
+
+    public String getRut() {
         return rut;
     }
-                
-    public void setnombre(String nombre)
-    {
-        this.nombre =nombre; 
-    }
-    public void setrut(String rut)
-    {
-        this.rut =rut; 
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
+    public void setRut(String rut) {
+        this.rut = rut;
+    }
 }
-

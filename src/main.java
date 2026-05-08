@@ -11,8 +11,29 @@
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.Scanner;
+import javax.swing.JFrame;
 
 public class main {
+    // JFrame invisible para que los diálogos aparezcan en primer plano
+    private static JFrame frameParent;
+
+    /**
+     * Lee un número entero desde consola de forma segura.
+     * Si el usuario ingresa algo que no es número, muestra un mensaje de error
+     * y retorna -1 para que el menú lo trate como opción inválida.
+     * @param teclado Scanner para leer entrada del usuario
+     * @return el entero ingresado, o -1 si la entrada es inválida
+     */
+    public static int leerEnteroConsola(Scanner teclado) {
+        try {
+            int valor = Integer.parseInt(teclado.nextLine().trim());
+            return valor;
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Debe ingresar un numero entero valido.");
+            return -1;
+        }
+    }
+
     /**
      * Método principal que inicia el programa del VideoClub.
      * Carga los datos desde archivos, permite seleccionar entre modo consola o ventanas,
@@ -20,15 +41,23 @@ public class main {
      * @param args argumentos de línea de comandos (no utilizados)
      */
     public static void main(String[] args) {
+        frameParent = new JFrame();
+        frameParent.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frameParent.setVisible(false);
+        frameParent.setFocusableWindowState(true);
+
         Scanner teclado = new Scanner(System.in);
         VideoClub sistema = new VideoClub();
-    
+
         sistema.cargarClientesDesdeArchivo("clientes.txt");
         sistema.cargarPeliculasDesdeArchivo("peliculas.txt");
 
         if (sistema.listarClientes().size() == 0 && sistema.listarPeliculas().size() == 0) {
             sistema.cargarDatosIniciales();
         }
+
+        // Los arriendos se cargan DESPUÉS de clientes y peliculas, ya que los necesita
+        sistema.cargarArriendosDesdeArchivo("arriendos.txt");
 
         int modo;
 
@@ -38,8 +67,7 @@ public class main {
             System.out.println("2. Ventanas");
             System.out.println("0. Salir del programa");
             System.out.print("Opcion: ");
-            modo = teclado.nextInt();
-            teclado.nextLine();
+            modo = leerEnteroConsola(teclado);
 
             switch (modo) {
                 case 1:
@@ -51,6 +79,7 @@ public class main {
                 case 0:
                     sistema.guardarClientesEnArchivo("clientes.txt");
                     sistema.guardarPeliculasEnArchivo("peliculas.txt");
+                    sistema.guardarArriendosEnArchivo("arriendos.txt");
                     System.out.println("Datos guardados. Programa finalizado.");
                     break;
                 default:
@@ -64,7 +93,6 @@ public class main {
 
     /**
      * Muestra el menú principal en modo consola y maneja la selección de opciones.
-     * Permite gestionar clientes, películas, arriendos y sugerencias.
      * @param teclado Scanner para leer entrada del usuario
      * @param sistema instancia de VideoClub para operaciones
      */
@@ -79,8 +107,7 @@ public class main {
             System.out.println("4. Sugerir peliculas a cliente");
             System.out.println("0. Volver al selector de modo");
             System.out.print("Seleccione una opcion: ");
-            opcionPrincipal = teclado.nextInt();
-            teclado.nextLine();
+            opcionPrincipal = leerEnteroConsola(teclado);
 
             switch (opcionPrincipal) {
                 case 1:
@@ -117,8 +144,7 @@ public class main {
             System.out.println("6. Buscar cliente por nombre");
             System.out.println("0. Volver");
             System.out.print("Seleccione una opcion: ");
-            opcion = teclado.nextInt();
-            teclado.nextLine();
+            opcion = leerEnteroConsola(teclado);
 
             switch (opcion) {
                 case 1:
@@ -146,8 +172,8 @@ public class main {
             }
         } while (opcion != 0);
     }
-    public static void buscarClientePorNombre(Scanner teclado, VideoClub sistema) 
-    {
+
+    public static void buscarClientePorNombre(Scanner teclado, VideoClub sistema) {
         String nombre;
         Cliente cliente;
 
@@ -156,15 +182,12 @@ public class main {
 
         cliente = sistema.buscarCliente(nombre, true);
 
-        if (cliente != null) 
-        {
+        if (cliente != null) {
             System.out.println(cliente);
-        }   
-        else 
-        {
+        } else {
             System.out.println("Cliente no encontrado");
         }
-}
+    }
 
     public static void menuPeliculas(Scanner teclado, VideoClub sistema) {
         int opcion;
@@ -179,8 +202,7 @@ public class main {
             System.out.println("6. Buscar pelicula por nombre");
             System.out.println("0. Volver");
             System.out.print("Seleccione una opcion: ");
-            opcion = teclado.nextInt();
-            teclado.nextLine();
+            opcion = leerEnteroConsola(teclado);
 
             switch (opcion) {
                 case 1:
@@ -208,9 +230,8 @@ public class main {
             }
         } while (opcion != 0);
     }
-    
-    public static void buscarPeliculaPorNombre(Scanner teclado, VideoClub sistema) 
-    {
+
+    public static void buscarPeliculaPorNombre(Scanner teclado, VideoClub sistema) {
         String nombre;
         Pelicula pelicula;
 
@@ -221,9 +242,7 @@ public class main {
 
         if (pelicula != null) {
             System.out.println(pelicula);
-        } 
-        else 
-        {
+        } else {
             System.out.println("Pelicula no encontrada");
         }
     }
@@ -237,8 +256,7 @@ public class main {
             System.out.println("2. Registrar devolucion");
             System.out.println("0. Volver");
             System.out.print("Seleccione una opcion: ");
-            opcion = teclado.nextInt();
-            teclado.nextLine();
+            opcion = leerEnteroConsola(teclado);
 
             switch (opcion) {
                 case 1:
@@ -373,6 +391,7 @@ public class main {
 
     /**
      * Solicita datos al usuario para crear una nueva película y la agrega al sistema.
+     * Pide el tipo (estreno o clasica) para instanciar la subclase correcta.
      * @param teclado Scanner para leer entrada del usuario
      * @param sistema instancia de VideoClub
      */
@@ -382,6 +401,7 @@ public class main {
         String genero;
         int duracion;
         int stock;
+        int tipo;
         boolean agregada;
 
         System.out.print("ID de la pelicula: ");
@@ -390,19 +410,38 @@ public class main {
         nombre = teclado.nextLine();
         System.out.print("Genero: ");
         genero = teclado.nextLine();
-        System.out.print("Duracion: ");
-        duracion = teclado.nextInt();
+        System.out.print("Duracion (minutos): ");
+        duracion = leerEnteroConsola(teclado);
         System.out.print("Stock: ");
-        stock = teclado.nextInt();
-        teclado.nextLine();
+        stock = leerEnteroConsola(teclado);
 
-        Pelicula pelicula = new Pelicula(id, nombre, genero, duracion, stock);
+        System.out.println("Tipo de pelicula:");
+        System.out.println("1. Estreno");
+        System.out.println("2. Clasica");
+        System.out.print("Seleccione tipo: ");
+        tipo = leerEnteroConsola(teclado);
+
+        Pelicula pelicula;
+
+        if (tipo == 1) {
+            System.out.print("Anio de estreno: ");
+            int anio = leerEnteroConsola(teclado);
+            pelicula = new PeliculaEstreno(id, nombre, genero, duracion, stock, anio);
+        } else if (tipo == 2) {
+            System.out.print("Decada (ej: 1980, 1990, 2000): ");
+            String decada = teclado.nextLine();
+            pelicula = new PeliculaClasica(id, nombre, genero, duracion, stock, decada);
+        } else {
+            System.out.println("Tipo invalido. Se creara como Estreno por defecto.");
+            pelicula = new PeliculaEstreno(id, nombre, genero, duracion, stock, 2025);
+        }
+
         agregada = sistema.agregarPelicula(pelicula);
 
         if (agregada) {
-            System.out.println("Pelicula agregada correctamente");
+            System.out.println("Pelicula agregada correctamente. Precio de arriendo: $" + pelicula.calcularPrecioArriendo());
         } else {
-            System.out.println("No se pudo agregar la pelicula");
+            System.out.println("No se pudo agregar la pelicula (ID ya existe)");
         }
     }
 
@@ -466,10 +505,9 @@ public class main {
         System.out.print("Nuevo genero: ");
         nuevoGenero = teclado.nextLine();
         System.out.print("Nueva duracion: ");
-        nuevaDuracion = teclado.nextInt();
+        nuevaDuracion = leerEnteroConsola(teclado);
         System.out.print("Nuevo stock: ");
-        nuevoStock = teclado.nextInt();
-        teclado.nextLine();
+        nuevoStock = leerEnteroConsola(teclado);
 
         modificada = sistema.modificarPelicula(id, nuevoNombre, nuevoGenero, nuevaDuracion, nuevoStock);
 
@@ -531,11 +569,9 @@ public class main {
             if (registrado) {
                 System.out.println("Arriendo registrado correctamente");
             }
-        } 
-        catch (ClienteNoEncontradoException e) {
+        } catch (ClienteNoEncontradoException e) {
             System.out.println("Error: " + e.getMessage());
-        } 
-        catch (PeliculaSinStockException e) {
+        } catch (PeliculaSinStockException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
@@ -560,13 +596,13 @@ public class main {
             System.out.println("No se pudo registrar la devolucion");
         }
     }
+
     /**
      * Sugiere películas a un cliente basado en su preferencia de género.
      * @param teclado Scanner para leer entrada del usuario
      * @param sistema instancia de VideoClub
      */
-    public static void sugerirPeliculasCliente(Scanner teclado, VideoClub sistema) 
-    {
+    public static void sugerirPeliculasCliente(Scanner teclado, VideoClub sistema) {
         String rut;
         ArrayList<Pelicula> sugerencias;
         int i;
@@ -578,24 +614,25 @@ public class main {
         sugerencias = sistema.sugerirPeliculas(rut);
         n = sugerencias.size();
 
-        if (n == 0) 
-        {
+        if (n == 0) {
             System.out.println("No hay sugerencias disponibles para este cliente");
             return;
         }
 
         System.out.println("Peliculas sugeridas:");
-        for (i = 0; i < n; i++) 
-        {
-            System.out.println(sugerencias.get(i));
+        for (i = 0; i < n; i++) {
+            System.out.println(sugerencias.get(i).getNombrePe() +
+                " | Tipo: " + sugerencias.get(i).getTipoPelicula() +
+                " | Precio arriendo: $" + sugerencias.get(i).calcularPrecioArriendo());
         }
     }
+
     public static void menuVentanas(VideoClub sistema) {
         String opcion;
 
         do {
             opcion = JOptionPane.showInputDialog(
-                null,
+                frameParent,
                 "VIDEO CLUB\n" +
                 "1. Agregar cliente\n" +
                 "2. Listar clientes\n" +
@@ -656,42 +693,41 @@ public class main {
                     registrarDevolucionVentana(sistema);
                     break;
                 case "13":
-                    sugerirPeliculasVentana(sistema);
+                    menuSugerenciasVentana(sistema);
                     break;
                 case "0":
-                    JOptionPane.showMessageDialog(null, "Volviendo al selector...");
+                    JOptionPane.showMessageDialog(frameParent, "Volviendo al selector...");
                     break;
                 default:
-                    JOptionPane.showMessageDialog(null, "Opcion invalida");
+                    JOptionPane.showMessageDialog(frameParent, "Opcion invalida");
             }
 
         } while (!opcion.equals("0"));
     }
-    
+
     public static void agregarClienteVentana(VideoClub sistema) {
-        String nombre = JOptionPane.showInputDialog("Nombre del cliente:");
-        String rut = JOptionPane.showInputDialog("Rut del cliente:");
-        String preferencia = JOptionPane.showInputDialog("Preferencia del cliente:");
+        String nombre = JOptionPane.showInputDialog(frameParent, "Nombre del cliente:");
+        String rut = JOptionPane.showInputDialog(frameParent, "Rut del cliente:");
+        String preferencia = JOptionPane.showInputDialog(frameParent, "Preferencia del cliente:");
 
         Cliente cliente = new Cliente(nombre, rut, preferencia);
         boolean agregado = sistema.agregarCliente(cliente);
 
         if (agregado) {
-            JOptionPane.showMessageDialog(null, "Cliente agregado correctamente");
-        } 
-        else {
-            JOptionPane.showMessageDialog(null, "No se pudo agregar el cliente");
+            JOptionPane.showMessageDialog(frameParent, "Cliente agregado correctamente");
+        } else {
+            JOptionPane.showMessageDialog(frameParent, "No se pudo agregar el cliente");
         }
     }
 
     public static void listarClientesVentana(VideoClub sistema) {
-    ArrayList<Cliente> lista = sistema.listarClientes();
+        ArrayList<Cliente> lista = sistema.listarClientes();
         String mensaje = "";
         int i;
         int n = lista.size();
 
         if (n == 0) {
-            JOptionPane.showMessageDialog(null, "No hay clientes registrados");
+            JOptionPane.showMessageDialog(frameParent, "No hay clientes registrados");
             return;
         }
 
@@ -699,23 +735,50 @@ public class main {
             mensaje = mensaje + lista.get(i) + "\n";
         }
 
-        JOptionPane.showMessageDialog(null, mensaje);
-    }  
+        JOptionPane.showMessageDialog(frameParent, mensaje);
+    }
 
     public static void agregarPeliculaVentana(VideoClub sistema) {
-        String id = JOptionPane.showInputDialog("ID de la pelicula:");
-        String nombre = JOptionPane.showInputDialog("Nombre de la pelicula:");
-        String genero = JOptionPane.showInputDialog("Genero:");
-        int duracion = Integer.parseInt(JOptionPane.showInputDialog("Duracion:"));
-        int stock = Integer.parseInt(JOptionPane.showInputDialog("Stock:"));
+        String id = JOptionPane.showInputDialog(frameParent, "ID de la pelicula:");
+        String nombre = JOptionPane.showInputDialog(frameParent, "Nombre de la pelicula:");
+        String genero = JOptionPane.showInputDialog(frameParent, "Genero:");
 
-        Pelicula pelicula = new Pelicula(id, nombre, genero, duracion, stock);
+        int duracion;
+        int stock;
+
+        try {
+            duracion = Integer.parseInt(JOptionPane.showInputDialog(frameParent, "Duracion (minutos):"));
+            stock = Integer.parseInt(JOptionPane.showInputDialog(frameParent, "Stock:"));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(frameParent, "Error: Duracion y stock deben ser numeros enteros validos.");
+            return;
+        }
+
+        String[] opciones = {"Estreno", "Clasica"};
+        int tipoSeleccion = JOptionPane.showOptionDialog(frameParent, "Tipo de pelicula:", "Tipo",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
+
+        Pelicula pelicula;
+
+        if (tipoSeleccion == 0) {
+            try {
+                int anio = Integer.parseInt(JOptionPane.showInputDialog(frameParent, "Anio de estreno:"));
+                pelicula = new PeliculaEstreno(id, nombre, genero, duracion, stock, anio);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(frameParent, "Error: El anio debe ser un numero entero valido.");
+                return;
+            }
+        } else {
+            String decada = JOptionPane.showInputDialog(frameParent, "Decada (ej: 1980, 1990, 2000):");
+            pelicula = new PeliculaClasica(id, nombre, genero, duracion, stock, decada);
+        }
+
         boolean agregada = sistema.agregarPelicula(pelicula);
 
         if (agregada) {
-            JOptionPane.showMessageDialog(null, "Pelicula agregada correctamente");
+            JOptionPane.showMessageDialog(frameParent, "Pelicula agregada correctamente.\nPrecio de arriendo: $" + pelicula.calcularPrecioArriendo());
         } else {
-            JOptionPane.showMessageDialog(null, "No se pudo agregar la pelicula");
+            JOptionPane.showMessageDialog(frameParent, "No se pudo agregar la pelicula (ID ya existe)");
         }
     }
 
@@ -726,7 +789,7 @@ public class main {
         int n = lista.size();
 
         if (n == 0) {
-            JOptionPane.showMessageDialog(null, "No hay peliculas registradas");
+            JOptionPane.showMessageDialog(frameParent, "No hay peliculas registradas");
             return;
         }
 
@@ -734,132 +797,264 @@ public class main {
             mensaje = mensaje + lista.get(i) + "\n";
         }
 
-        JOptionPane.showMessageDialog(null, mensaje);
-    }    
+        JOptionPane.showMessageDialog(frameParent, mensaje);
+    }
+
+    public static void menuSugerenciasVentana(VideoClub sistema) {
+        String opcion;
+
+        do {
+            opcion = JOptionPane.showInputDialog(
+                frameParent,
+                "MENU DE SUGERENCIAS\n" +
+                "1. Sugerir por genero preferido\n" +
+                "2. Sugerir peliculas populares\n" +
+                "3. Sugerir estrenos\n" +
+                "4. Sugerir peliculas clasicas\n" +
+                "5. Sugerir por genero especifico\n" +
+                "0. Volver",
+                "Sugerencias",
+                JOptionPane.PLAIN_MESSAGE);
+
+            if (opcion == null) {
+                opcion = "0";
+            }
+
+            switch (opcion) {
+                case "1":
+                    sugerirPeliculasVentana(sistema);
+                    break;
+                case "2":
+                    sugerirPeliculasPopularesVentana(sistema);
+                    break;
+                case "3":
+                    sugerirPeliculasEstenosVentana(sistema);
+                    break;
+                case "4":
+                    sugerirPeliculasClasicasVentana(sistema);
+                    break;
+                case "5":
+                    sugerirPeliculasPorGeneroVentana(sistema);
+                    break;
+                case "0":
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(frameParent, "Opcion invalida");
+            }
+        } while (!opcion.equals("0"));
+    }
 
     public static void sugerirPeliculasVentana(VideoClub sistema) {
-        String rut = JOptionPane.showInputDialog("Rut del cliente:");
+        String rut = JOptionPane.showInputDialog(frameParent, "Rut del cliente:");
         ArrayList<Pelicula> sugerencias = sistema.sugerirPeliculas(rut);
         String mensaje = "";
         int i;
         int n = sugerencias.size();
 
         if (n == 0) {
-            JOptionPane.showMessageDialog(null, "No hay sugerencias disponibles");
+            JOptionPane.showMessageDialog(frameParent, "No hay sugerencias disponibles para el genero preferido");
             return;
         }
 
+        mensaje = "SUGERENCIAS POR GENERO PREFERIDO:\n\n";
         for (i = 0; i < n; i++) {
-            mensaje = mensaje + sugerencias.get(i) + "\n";
+            mensaje = mensaje + (i+1) + ". " + sugerencias.get(i).getNombrePe() + " (" + sugerencias.get(i).getGenero() + ")\n";
         }
 
-        JOptionPane.showMessageDialog(null, mensaje);
-    }   
+        JOptionPane.showMessageDialog(frameParent, mensaje);
+    }
+
+    public static void sugerirPeliculasPopularesVentana(VideoClub sistema) {
+        ArrayList<Pelicula> populares = sistema.sugerirPeliculasPopulares();
+        String mensaje = "";
+        int i;
+        int n = populares.size();
+
+        if (n == 0) {
+            JOptionPane.showMessageDialog(frameParent, "No hay peliculas populares disponibles");
+            return;
+        }
+
+        mensaje = "PELICULAS POPULARES (TOP " + Math.min(n, 10) + "):\n\n";
+        for (i = 0; i < Math.min(n, 10); i++) {
+            mensaje = mensaje + (i+1) + ". " + populares.get(i).getNombrePe() + " (" + populares.get(i).getVecesArrendada() + " arrendadas)\n";
+        }
+
+        JOptionPane.showMessageDialog(frameParent, mensaje);
+    }
+
+    public static void sugerirPeliculasEstenosVentana(VideoClub sistema) {
+        ArrayList<Pelicula> estrenos = sistema.sugerirPeliculasEstrenos();
+        String mensaje = "";
+        int i;
+        int n = estrenos.size();
+
+        if (n == 0) {
+            JOptionPane.showMessageDialog(frameParent, "No hay estrenos disponibles");
+            return;
+        }
+
+        mensaje = "PELICULAS ESTRENOS DISPONIBLES:\n\n";
+        for (i = 0; i < n; i++) {
+            PeliculaEstreno estreno = (PeliculaEstreno) estrenos.get(i);
+            mensaje = mensaje + (i+1) + ". " + estreno.getNombrePe() + " (" + estreno.getAnioEstreno() + ")\n";
+        }
+
+        JOptionPane.showMessageDialog(frameParent, mensaje);
+    }
+
+    public static void sugerirPeliculasClasicasVentana(VideoClub sistema) {
+        ArrayList<Pelicula> clasicas = sistema.sugerirPeliculasClasicas();
+        String mensaje = "";
+        int i;
+        int n = clasicas.size();
+
+        if (n == 0) {
+            JOptionPane.showMessageDialog(frameParent, "No hay peliculas clasicas disponibles");
+            return;
+        }
+
+        mensaje = "PELICULAS CLASICAS DISPONIBLES:\n\n";
+        for (i = 0; i < n; i++) {
+            PeliculaClasica clasica = (PeliculaClasica) clasicas.get(i);
+            mensaje = mensaje + (i+1) + ". " + clasica.getNombrePe() + " (" + clasica.getDecada() + ")\n";
+        }
+
+        JOptionPane.showMessageDialog(frameParent, mensaje);
+    }
+
+    public static void sugerirPeliculasPorGeneroVentana(VideoClub sistema) {
+        String genero = JOptionPane.showInputDialog(frameParent, "Ingrese el genero a buscar:\n(Accion, Terror, Comedia, Ciencia Ficcion, Drama, Crimen, Romance, Animacion, Fantasia)");
+        ArrayList<Pelicula> porGenero = sistema.sugerirPeliculasPorGenero(genero);
+        String mensaje = "";
+        int i;
+        int n = porGenero.size();
+
+        if (n == 0) {
+            JOptionPane.showMessageDialog(frameParent, "No hay peliculas disponibles del genero: " + genero);
+            return;
+        }
+
+        mensaje = "PELICULAS DE GENERO: " + genero.toUpperCase() + "\n\n";
+        for (i = 0; i < n; i++) {
+            mensaje = mensaje + (i+1) + ". " + porGenero.get(i).getNombrePe() + " (" + porGenero.get(i).getDuracion() + " min)\n";
+        }
+
+        JOptionPane.showMessageDialog(frameParent, mensaje);
+    }
 
     public static void buscarClienteVentana(VideoClub sistema) {
-        String rut = JOptionPane.showInputDialog("Rut del cliente:");
+        String rut = JOptionPane.showInputDialog(frameParent, "Rut del cliente:");
         Cliente cliente = sistema.buscarCliente(rut);
 
         if (cliente != null) {
-            JOptionPane.showMessageDialog(null, cliente.toString());
+            JOptionPane.showMessageDialog(frameParent, cliente.toString());
         } else {
-            JOptionPane.showMessageDialog(null, "Cliente no encontrado");
+            JOptionPane.showMessageDialog(frameParent, "Cliente no encontrado");
         }
     }
- 
+
     public static void modificarClienteVentana(VideoClub sistema) {
-        String rut = JOptionPane.showInputDialog("Rut del cliente a modificar:");
-        String nuevoNombre = JOptionPane.showInputDialog("Nuevo nombre:");
-        String nuevaPreferencia = JOptionPane.showInputDialog("Nueva preferencia:");
+        String rut = JOptionPane.showInputDialog(frameParent, "Rut del cliente a modificar:");
+        String nuevoNombre = JOptionPane.showInputDialog(frameParent, "Nuevo nombre:");
+        String nuevaPreferencia = JOptionPane.showInputDialog(frameParent, "Nueva preferencia:");
 
         boolean modificado = sistema.modificarCliente(rut, nuevoNombre, nuevaPreferencia);
 
         if (modificado) {
-            JOptionPane.showMessageDialog(null, "Cliente modificado correctamente");
+            JOptionPane.showMessageDialog(frameParent, "Cliente modificado correctamente");
         } else {
-            JOptionPane.showMessageDialog(null, "No se pudo modificar el cliente");
+            JOptionPane.showMessageDialog(frameParent, "No se pudo modificar el cliente");
         }
     }
 
     public static void eliminarClienteVentana(VideoClub sistema) {
-        String rut = JOptionPane.showInputDialog("Rut del cliente a eliminar:");
+        String rut = JOptionPane.showInputDialog(frameParent, "Rut del cliente a eliminar:");
         boolean eliminado = sistema.eliminarCliente(rut);
 
         if (eliminado) {
-            JOptionPane.showMessageDialog(null, "Cliente eliminado correctamente");
+            JOptionPane.showMessageDialog(frameParent, "Cliente eliminado correctamente");
         } else {
-            JOptionPane.showMessageDialog(null, "No se pudo eliminar el cliente");
+            JOptionPane.showMessageDialog(frameParent, "No se pudo eliminar el cliente");
         }
     }
 
     public static void buscarPeliculaVentana(VideoClub sistema) {
-        String id = JOptionPane.showInputDialog("ID de la pelicula:");
+        String id = JOptionPane.showInputDialog(frameParent, "ID de la pelicula:");
         Pelicula pelicula = sistema.buscarPelicula(id);
 
         if (pelicula != null) {
-            JOptionPane.showMessageDialog(null, pelicula.toString());
+            JOptionPane.showMessageDialog(frameParent, pelicula.toString());
         } else {
-            JOptionPane.showMessageDialog(null, "Pelicula no encontrada");
+            JOptionPane.showMessageDialog(frameParent, "Pelicula no encontrada");
         }
     }
 
     public static void modificarPeliculaVentana(VideoClub sistema) {
-        String id = JOptionPane.showInputDialog("ID de la pelicula a modificar:");
-        String nuevoNombre = JOptionPane.showInputDialog("Nuevo nombre:");
-        String nuevoGenero = JOptionPane.showInputDialog("Nuevo genero:");
-        int nuevaDuracion = Integer.parseInt(JOptionPane.showInputDialog("Nueva duracion:"));
-        int nuevoStock = Integer.parseInt(JOptionPane.showInputDialog("Nuevo stock:"));
+        String id = JOptionPane.showInputDialog(frameParent, "ID de la pelicula a modificar:");
+        String nuevoNombre = JOptionPane.showInputDialog(frameParent, "Nuevo nombre:");
+        String nuevoGenero = JOptionPane.showInputDialog(frameParent, "Nuevo genero:");
+
+        int nuevaDuracion;
+        int nuevoStock;
+
+        try {
+            nuevaDuracion = Integer.parseInt(JOptionPane.showInputDialog(frameParent, "Nueva duracion (minutos):"));
+            nuevoStock = Integer.parseInt(JOptionPane.showInputDialog(frameParent, "Nuevo stock:"));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(frameParent, "Error: Duracion y stock deben ser numeros enteros validos.");
+            return;
+        }
 
         boolean modificada = sistema.modificarPelicula(id, nuevoNombre, nuevoGenero, nuevaDuracion, nuevoStock);
 
         if (modificada) {
-            JOptionPane.showMessageDialog(null, "Pelicula modificada correctamente");
+            JOptionPane.showMessageDialog(frameParent, "Pelicula modificada correctamente");
         } else {
-            JOptionPane.showMessageDialog(null, "No se pudo modificar la pelicula");
+            JOptionPane.showMessageDialog(frameParent, "No se pudo modificar la pelicula");
         }
     }
 
     public static void eliminarPeliculaVentana(VideoClub sistema) {
-        String id = JOptionPane.showInputDialog("ID de la pelicula a eliminar:");
+        String id = JOptionPane.showInputDialog(frameParent, "ID de la pelicula a eliminar:");
         boolean eliminada = sistema.eliminarPelicula(id);
 
         if (eliminada) {
-            JOptionPane.showMessageDialog(null, "Pelicula eliminada correctamente");
+            JOptionPane.showMessageDialog(frameParent, "Pelicula eliminada correctamente");
         } else {
-            JOptionPane.showMessageDialog(null, "No se pudo eliminar la pelicula");
+            JOptionPane.showMessageDialog(frameParent, "No se pudo eliminar la pelicula");
         }
     }
 
     public static void registrarArriendoVentana(VideoClub sistema) {
-        String idArriendo = JOptionPane.showInputDialog("ID del arriendo:");
-        String rutCliente = JOptionPane.showInputDialog("Rut del cliente:");
-        String idPelicula = JOptionPane.showInputDialog("ID de la pelicula:");
-        String fechaArriendo = JOptionPane.showInputDialog("Fecha de arriendo:");
-        String fechaDevolucion = JOptionPane.showInputDialog("Fecha de devolucion:");
+        String idArriendo = JOptionPane.showInputDialog(frameParent, "ID del arriendo:");
+        String rutCliente = JOptionPane.showInputDialog(frameParent, "Rut del cliente:");
+        String idPelicula = JOptionPane.showInputDialog(frameParent, "ID de la pelicula:");
+        String fechaArriendo = JOptionPane.showInputDialog(frameParent, "Fecha de arriendo:");
+        String fechaDevolucion = JOptionPane.showInputDialog(frameParent, "Fecha de devolucion:");
 
         try {
             boolean registrado = sistema.registrarArriendoConExcepciones(
                     idArriendo, rutCliente, idPelicula, fechaArriendo, fechaDevolucion);
 
             if (registrado) {
-                JOptionPane.showMessageDialog(null, "Arriendo registrado correctamente");
+                JOptionPane.showMessageDialog(frameParent, "Arriendo registrado correctamente");
             }
         } catch (ClienteNoEncontradoException e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+            JOptionPane.showMessageDialog(frameParent, "Error: " + e.getMessage());
         } catch (PeliculaSinStockException e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+            JOptionPane.showMessageDialog(frameParent, "Error: " + e.getMessage());
         }
     }
 
     public static void registrarDevolucionVentana(VideoClub sistema) {
-        String idArriendo = JOptionPane.showInputDialog("ID del arriendo a devolver:");
+        String idArriendo = JOptionPane.showInputDialog(frameParent, "ID del arriendo a devolver:");
         boolean devuelto = sistema.registrarDevolucion(idArriendo);
 
         if (devuelto) {
-            JOptionPane.showMessageDialog(null, "Devolucion registrada correctamente");
+            JOptionPane.showMessageDialog(frameParent, "Devolucion registrada correctamente");
         } else {
-            JOptionPane.showMessageDialog(null, "No se pudo registrar la devolucion");
+            JOptionPane.showMessageDialog(frameParent, "No se pudo registrar la devolucion");
         }
     }
-
 }

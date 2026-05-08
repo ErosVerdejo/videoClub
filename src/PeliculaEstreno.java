@@ -29,6 +29,16 @@ public class PeliculaEstreno extends Pelicula {
         return "Estreno";
     }
 
+    /*
+     * Los estrenos tienen un recargo del 50% sobre el precio base,
+     * ya que son películas recientes con mayor demanda.
+     * retorna el precio en pesos
+     */
+    @Override
+    public int calcularPrecioArriendo() {
+        return (int)(PRECIO_BASE * 1.5);
+    }
+
     @Override
     public String toString() {
         return "PeliculaEstreno{" +

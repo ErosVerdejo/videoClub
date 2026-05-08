@@ -1,6 +1,6 @@
-eros;9999999-9;comedia
-null;null;null
+Eros;9999999-9;Comedia
 Martin;22222222-2;Terror
+tyu;45346789-0;monja
 Isaias;11111111-1;Accion
 Valentina;33333333-3;Comedia
-isaias;21754903-5;the chosen
+Isaias;21754903-5;Ciencia Ficcion

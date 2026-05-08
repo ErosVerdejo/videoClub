@@ -1,5 +1,36 @@
-P005;La Monja;Terror;100;2;0
-P004;Rapidos y Furiosos;Accion;130;0;1
-P001;John Wick;Accion;120;2;1
-P003;Son Como Ninos;Comedia;95;4;0
-P002;El Conjuro;Terror;110;1;1
+P005;La Monja;Terror;100;2;0;estreno;2000
+P027;The Matrix;Ciencia Ficcion;136;2;0;estreno;2000
+P004;Rapidos y Furiosos;Accion;130;2;1;estreno;2000
+P026;Dune;Ciencia Ficcion;155;3;0;estreno;2000
+P007;Mad Max Fury Road;Accion;120;2;0;estreno;2000
+P029;La La Land;Romance;128;2;0;estreno;2000
+P006;Top Gun Maverick;Accion;130;3;0;estreno;2000
+P028;Avatar 2;Ciencia Ficcion;192;2;0;estreno;2000
+P001;John Wick;Accion;120;3;1;estreno;2000
+P023;Pulp Fiction;Crimen;154;2;0;estreno;2000
+P022;El Padrino;Crimen;175;2;0;estreno;2000
+P003;Son Como Ninos;Comedia;95;4;0;estreno;2000
+P025;Interstellar;Ciencia Ficcion;169;3;0;estreno;2000
+P002;El Conjuro;Terror;110;2;1;estreno;2000
+P024;No Country for Old Men;Crimen;122;2;0;estreno;2000
+P009;Misión Imposible;Accion;115;2;0;estreno;2000
+P008;El Señor de los Anillos;Accion;178;3;0;estreno;2000
+P030;Titanic;Romance;195;2;0;estreno;2000
+P010;Spider-Man No Way Home;Accion;148;3;0;estreno;2000
+P032;El Rey Leon;Animacion;88;3;0;estreno;2000
+P031;Coco;Animacion;105;4;0;estreno;2000
+P016;Superbad;Comedia;113;3;0;estreno;2000
+P015;Midsommar;Terror;148;2;0;estreno;2000
+P018;Free Guy;Comedia;115;2;0;estreno;2000
+P017;The Hangover;Comedia;100;3;0;estreno;2000
+P012;El Exorcista;Terror;122;2;0;estreno;2000
+P034;El Señor de los Anillos Las Dos Torres;Fantasia;179;2;0;estreno;2000
+P011;It;Terror;135;2;0;estreno;2000
+P033;Encanto;Animacion;99;3;0;estreno;2000
+P014;Suspiria;Terror;99;2;0;estreno;2000
+P036;Doctor Strange Multiverse;Fantasia;126;2;0;estreno;2000
+P013;Hereditary;Terror;127;3;0;estreno;2000
+P035;Harry Potter Piedra Filosofal;Fantasia;152;3;0;estreno;2000
+P019;Dolor y Gloria;Drama;113;2;0;estreno;2000
+P021;Forrest Gump;Drama;142;2;0;estreno;2000
+P020;Parasite;Drama;132;3;0;estreno;2000

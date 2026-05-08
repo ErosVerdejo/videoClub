@@ -92,7 +92,7 @@ public class Arriendo {
     public String toString() {
         return "Arriendo{" +
                 "idArriendo='" + idArriendo + '\'' +
-                ", cliente='" + cliente.getnombre() + '\'' +
+                ", cliente='" + cliente.getNombre() + '\'' +
                 ", pelicula='" + pelicula.getNombrePe() + '\'' +
                 ", fechaArriendo='" + fechaArriendo + '\'' +
                 ", fechaDevolucion='" + fechaDevolucion + '\'' +

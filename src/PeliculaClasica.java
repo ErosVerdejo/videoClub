@@ -29,6 +29,16 @@ public class PeliculaClasica extends Pelicula {
         return "Clasica";
     }
 
+    /*
+     * Las películas clásicas tienen un descuento del 30% sobre el precio base,
+     * ya que son títulos antiguos con menor demanda actual.
+     * retorna el precio en pesos
+     */
+    @Override
+    public int calcularPrecioArriendo() {
+        return (int)(PRECIO_BASE * 0.7);
+    }
+
     @Override
     public String toString() {
         return "PeliculaClasica{" +

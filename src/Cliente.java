@@ -1,5 +1,3 @@
-
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -32,16 +30,8 @@ public class Cliente extends Persona {
         return preferencia;
     }
 
-    public ArrayList<Arriendo> getHistorial() {
-        return historial;
-    }
-
     public void setPreferencia(String preferencia) {
         this.preferencia = preferencia;
-    }
-
-    public void setHistorial(ArrayList<Arriendo> historial) {
-        this.historial = historial;
     }
 
     /*
@@ -75,8 +65,8 @@ public class Cliente extends Persona {
     @Override
     public String toString() {
         return "Cliente{" +
-                "nombre='" + getnombre() + '\'' +
-                ", rut='" + getrut() + '\'' +
+                "nombre='" + getNombre() + '\'' +
+                ", rut='" + getRut() + '\'' +
                 ", preferencia='" + preferencia + '\'' +
                 ", cantidadArriendos=" + historial.size() +
                 '}';
