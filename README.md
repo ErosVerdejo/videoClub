@@ -46,6 +46,8 @@ VideoClub/
 ## 💀 Errores a Solucionar
 - cuando se se quiere generar un cliente si en la ventana se apreta cancelar hasta su ultimo atributo este se va a generar con sus atributos NULL.
 - se reiniciaron los commits pero teniamos 8 del primer informe.
+- por si no ve la ventana otra vez <img width="273" height="412" alt="image" src="https://github.com/user-attachments/assets/26adadf3-6ac8-4874-b835-fc247eec93c4" />
+
 
 ## 👤 Autores
 - Eros Verdejo
